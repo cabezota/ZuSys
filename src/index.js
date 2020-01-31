@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import playerAsset from "./assets/sprite-pruebita.png";
+import playerAsset from "./assets/pink.png";
 import platformAsset from "./assets/platform.png";
 
 const config = {
