@@ -6,11 +6,11 @@
   "scripts": {
     "build": "webpack --config webpack/prod.js ",
     "start": "webpack-dev-server --config webpack/base.js --open",
-    "deploy": "git subtree push --prefix dist origin gh-pages"
+    "deploy": "npm run build && git subtree push --prefix dist origin gh-pages"
   },
   "husky": {
-	"post-receive": "if git-branch-is master; then npm run deploy; fi"
-  }, 
+    "post-receive": "if git-branch-is master; then npm run deploy; fi"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/photonstorm/phaser3-project-template.git"
