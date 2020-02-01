@@ -5,11 +5,14 @@ class Player {
   constructor(sprite, directionFactory) {
 	this.sprite = sprite;
 	this.sprite.setCollideWorldBounds(true);
-	this.direction = directionFactory.create(this.sprite.x + 30, this.sprite.y + 14);
+	this.direction = directionFactory.create(
+	  this.sprite.x,
+	  this.sprite.y,
+	);
   }
 
   update() {
-	this.direction.update(this.sprite.x + 30, this.sprite.y + 14);
+	this.direction.update(this.sprite.x, this.sprite.y);
   }
 }
 

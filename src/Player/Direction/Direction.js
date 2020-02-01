@@ -3,11 +3,12 @@ import directionAsset from "../../assets/flecha-direcion.png";
 class Direction {
   constructor(sprite) {
 	this.sprite = sprite;
+	this.sprite.rotation = this.sprite.rotation;
   }
 
   update(x, y) {
-	this.sprite.x = x;
-	this.sprite.y = y;
+	this.sprite.x = x + 15;
+	this.sprite.y = y - 70;
   }
 }
 
