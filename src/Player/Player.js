@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import playerAsset from "../assets/pink.png";
 import DirectionFactory from "./Direction/Direction";
-
+import StateMachine from "javascript-state-machine";
 
 class Player {
   constructor({sprite, directionFactory, leftKey, rightKey}) {
@@ -13,27 +13,35 @@ class Player {
 	);
 	this.leftKey = leftKey;
 	this.rightKey = rightKey;
+
+	this.state = new StateMachine({
+	  init: "facingRight",
+	  transitions: [
+		{ name: "turnLeft", from: "facingRight", to: "facingLeft"},
+		{ name: "turnRight", from: "facingLeft", to: "facingRight"}
+	  ],
+	  methods: {
+		onTurnLeft: () => {
+		  this.sprite.flipX = true;
+		  this.direction.turnLeft();
+		},
+		onTurnRight: () => {
+		  this.sprite.flipX = false;
+		  this.direction.turnRight();
+		}
+	  }
+	});
   }
 
   update() {
 	this.direction.update(this.sprite.x, this.sprite.y);
 
-	if(Phaser.Input.Keyboard.JustDown(this.leftKey)) {
-	  this.turnLeft();
+	if(Phaser.Input.Keyboard.JustDown(this.leftKey) && this.state.can("turnLeft")) {
+	  this.state.turnLeft();
 	}
-	if(Phaser.Input.Keyboard.JustDown(this.rightKey)) {
-	  this.turnRight();
+	if(Phaser.Input.Keyboard.JustDown(this.rightKey) && this.state.can("turnRight")) {
+	  this.state.turnRight();
 	}
-  }
-
-  turnLeft() {
-	this.sprite.flipX = true;
-	this.direction.turnLeft();
-  }
-
-  turnRight() {
-	this.sprite.flipX = false;
-	this.direction.turnRight();
   }
 }
 
