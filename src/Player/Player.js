@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import playerAsset from "../assets/ELECTRA.png";
+import playerJson from "../assets/ELECTRA.json";
 import DirectionFactory from "./Direction/Direction";
 import StateMachine from "javascript-state-machine";
 import JumpBarFactory from "./JumpBar/JumpBar";
@@ -45,7 +46,7 @@ class Player {
 
   update() {
 	this.direction.update(this.sprite.x, this.sprite.y, this.state.is("facingRight"));
-	this.jumpBar.update(this.sprite.x, this.sprite.y, this.state.is("facingRight"));
+	this.jumpBar.update(this.sprite.x, this.sprite.y);
 
 	if(Phaser.Input.Keyboard.JustDown(this.leftKey) && this.state.can("turnLeft")) {
 	  this.state.turnLeft();
@@ -65,9 +66,7 @@ export default class PlayerFactory {
   }
 
   loadAssets() {
-	this.game.load.spritesheet("player", playerAsset, {
-	  frameWidth: 100, frameHeight: 100,
-	});
+	this.game.load.atlas("player", playerAsset, playerJson);
 	this.directionFactory.loadAssets();
 	this.jumpBarFactory.loadAssets();
   }
@@ -80,6 +79,17 @@ export default class PlayerFactory {
 	  leftKey: this.game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT),
 	  rightKey: this.game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT),
 	});
+
+	const frames = this.game.anims.generateFrameNames("player");
+
+	const anims = this.game.anims.create({
+	  key: "idle",
+	  frames: [frames[0], frames[6]],
+	  frameRate: 2,
+	  repeat: -1,
+	});
+
+	player.sprite.play(anims);
 
 	return player;
   }

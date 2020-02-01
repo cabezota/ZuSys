@@ -5,10 +5,9 @@ class JumpBar {
 	this.sprite = sprite;
   }
 
-  update(x, y, isFacingRight) {
-	const sign = isFacingRight? 1 : -1;	
-	this.sprite.x = x + 4*sign;
-	this.sprite.y = y - 42;
+  update(x, y) {
+	this.sprite.x = x;
+	this.sprite.y = y - 65;
   }
 }
 

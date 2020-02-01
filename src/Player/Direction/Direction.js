@@ -2,8 +2,8 @@ import directionAsset from "../../assets/flecha-direcionTinyHero.png";
 
 class Direction {
   constructor(sprite) {
-	this.X_OFFSET = 15;
-	this.Y_OFFSET = -50;
+	this.X_OFFSET = 1;
+	this.Y_OFFSET = -64;
 	this.ROTATION_DELTA = Math.PI/80;
 	this.ROTATION_0 = 0;
 	this.ROTATION_BOUND = Math.PI/2;
