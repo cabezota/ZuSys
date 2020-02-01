@@ -3,6 +3,7 @@ import playerAsset from "../assets/ELECTRA.png";
 import playerJson from "../assets/ELECTRA.json";
 import DirectionFactory from "./Direction/Direction";
 import StateMachine from "javascript-state-machine";
+import StateMachineHistory from "javascript-state-machine/lib/history";
 import JumpBarFactory from "./JumpBar/JumpBar";
 
 class Player {
@@ -18,18 +19,20 @@ class Player {
 	this.jumpBar = jumpBarFactory.create(
 	  this.sprite.x,
 	  this.sprite.y,
+	  jumpKey
 	);
 	
 	this.leftKey = leftKey;
 	this.rightKey = rightKey;
+	this.jumpKey = jumpKey;
 
 	this.state = new StateMachine({
 	  init: "facingRight",
 	  transitions: [
-		{ name: "turnLeft", from: "facingRight", to: "facingLeft"},
-		{ name: "turnRight", from: "facingLeft", to: "facingRight"},
-		{ name: "takeImpulseLeft", from: "facingLeft", to: "takingImpulse"},
-		{ name: "takeImpulseRight", from: "facingRight", to: "takingImpulse"}
+		{ name: "turnLeft", from: ["facingRight", "jumping"], to: "facingLeft"},
+		{ name: "turnRight", from: ["facingLeft", "jumping"], to: "facingRight"},
+		{ name: "takeImpulse", from: ["facingLeft", "facingRight"], to: "takingImpulse"},
+		{ name: "jump", from: "takingImpulse", to: "jumping"},
 	  ],
 	  methods: {
 		onTurnLeft: () => {
@@ -40,16 +43,18 @@ class Player {
 		  this.sprite.flipX = false;
 		  this.direction.turnRight();
 		},
-		onTakeImpulseLeft: () => {
-		  
+		onTakeImpulse: () => {
+		  this.direction.shoot();		  
+		  this.jumpBar.play();
 		},
-	  }
+		onJump: () => {
+		  this.jumpBar.reset();
+		  this.direction.aim();
+		},
+	  },
+	  plugins: [new StateMachineHistory()]
 	});
 
-	this.state.turnLeft();
-	// console.log(jumpKey);
-	// this.jumpKey = jumpKey;
-	// this.jumpKey.onDown().add(this.jump, this);
   }
 
   jump() {
@@ -59,6 +64,27 @@ class Player {
   update() {
 	this.direction.update(this.sprite.x, this.sprite.y, this.state.is("facingRight"));
 	this.jumpBar.update(this.sprite.x, this.sprite.y);
+
+
+	if(Phaser.Input.Keyboard.JustDown(this.jumpKey) && this.state.can("takeImpulse")) {
+	  this.state.takeImpulse();
+	}		
+
+	if(Phaser.Input.Keyboard.JustUp(this.jumpKey) && this.state.can("jump")) {
+	  this.state.jump();
+	  const turns = this.state.history.filter(state => {
+		return state === "facingRight" || state === "facingLeft";
+	  });
+	  const lastTurn = turns[turns.length - 1];
+	  this.state.clearHistory();
+
+	  if(lastTurn === "facingLeft")  {
+		this.state.turnLeft();
+	  }
+	  else {
+		this.state.turnRight();
+	  }
+	}
 
 	if(Phaser.Input.Keyboard.JustDown(this.leftKey) && this.state.can("turnLeft")) {
 	  this.state.turnLeft();
@@ -90,7 +116,7 @@ export default class PlayerFactory {
 	  jumpBarFactory: this.jumpBarFactory,
 	  leftKey: this.game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT),
 	  rightKey: this.game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT),
-	  jumpKey: this.game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACEBAR),
+	  jumpKey: this.game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
 	});
 
 	const frames = this.game.anims.generateFrameNames("player");

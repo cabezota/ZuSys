@@ -1,7 +1,6 @@
 import Direction from "./Direction";
 import directionAsset from "./assets/flecha-direcion.png";
 
-
 export default class DirectionFactory {
   constructor(game) {
 	this.KEY = "direction";
