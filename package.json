@@ -5,8 +5,12 @@
   "main": "src/index.js",
   "scripts": {
     "build": "webpack --config webpack/prod.js ",
-    "start": "webpack-dev-server --config webpack/base.js --open"
+    "start": "webpack-dev-server --config webpack/base.js --open",
+    "deploy": "git subtree push --prefix dist origin gh-pages"
   },
+  "husky": {
+	"post-receive": "if git-branch-is master; then npm run deploy; fi"
+  }, 
   "repository": {
     "type": "git",
     "url": "git+https://github.com/photonstorm/phaser3-project-template.git"
@@ -25,6 +29,7 @@
     "clean-webpack-plugin": "^3.0.0",
     "file-loader": "^4.2.0",
     "html-webpack-plugin": "^3.2.0",
+    "husky": "^4.2.1",
     "raw-loader": "^3.1.0",
     "terser-webpack-plugin": "^2.2.1",
     "webpack": "^4.41.2",
