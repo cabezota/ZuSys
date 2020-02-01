@@ -1,10 +1,15 @@
-import jumpBarAsset from "../../assets/burbuja-potencia.png";
+import jumpBarAsset from "../../assets/burbuja-brincoTinyHero.png";
 
 class JumpBar {
   constructor({sprite}) {
-
 	this.sprite = sprite;
-  }  
+  }
+
+  update(x, y, isFacingRight) {
+	const sign = isFacingRight? 1 : -1;	
+	this.sprite.x = x + 4*sign;
+	this.sprite.y = y - 42;
+  }
 }
 
 export default class JumpBarFactory {
@@ -14,7 +19,10 @@ export default class JumpBarFactory {
   }
 
   loadAssets() {
-	this.game.load.image(this.KEY, jumpBarAsset);
+	this.game.load.spritesheet(this.KEY, jumpBarAsset, {
+	  frameWidth: 20,
+	  frameHeight: 20,
+	});
   }
 
   create(x, y) {

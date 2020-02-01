@@ -12,6 +12,7 @@ const config = {
     create: create,
 	update: update,
   },
+  backgroundColor: "#FFFFFF",
   physics: {
     default: "arcade",
     arcade: {
