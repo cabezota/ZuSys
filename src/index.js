@@ -1,6 +1,6 @@
 import Phaser from "phaser";
-import playerAsset from "./assets/pink.png";
 import platformAsset from "./assets/platform.png";
+import PlayerFactory from "./Player/Player";
 
 const config = {
   type: Phaser.AUTO,
@@ -9,7 +9,8 @@ const config = {
   height: 600,
   scene: {
     preload: preload,
-    create: create
+    create: create,
+	update: update,
   },
   physics: {
     default: "arcade",
@@ -17,23 +18,25 @@ const config = {
       gravity: { y: 300 },
       debug: false,
 	}
-  }
+  },
 };
 
 const game = new Phaser.Game(config);
-
+let playerFactory;
 function preload() {
-  this.load.image("player", playerAsset);
-  this.load.image("platform", platformAsset);
+  playerFactory = new PlayerFactory(this);
+  playerFactory.loadAssets();
 }
 
 let player,
+	direction,
 	platforms,
 	spacebars;
 function create() {
-  player = this.physics.add.sprite(64, 64, "player");
-  player.setBounce(0.2);
-  player.setCollideWorldBounds(true);
+  this.scale.pageAlignHorizontally = true;
+  this.scale.pageAlignVertically = true;
+  this.scale.refresh();
+  player = playerFactory.create(64, 64);
 
   platforms = this.physics.add.staticGroup();
   platforms.create(436, 536, "platform");
@@ -41,4 +44,7 @@ function create() {
   this.physics.add.collider(player, platforms);
 }
 
+function update() {
+  player.update();
+}
 
