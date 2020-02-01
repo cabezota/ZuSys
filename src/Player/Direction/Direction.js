@@ -2,27 +2,46 @@ import directionAsset from "../../assets/flecha-direcion.png";
 
 class Direction {
   constructor(sprite) {
+	this.X_OFFSET = 15;
+	this.Y_OFFSET = -50;
+	this.ROTATION_DELTA = Math.PI/80;
+	this.ROTATION_LOWER_BOUND = 0;
+	this.ROTATION_HIGHER_BOUND = Math.PI/2;
+
 	this.sprite = sprite;
-	this.sprite.rotation = this.sprite.rotation;
+	// Para que la flecha rote con el borde inferior como centro.
 	this.sprite.setOrigin(1);
 	this.clockwise = true;
   }
 
   update(x, y) {
-	this.sprite.x = x + 15;
-	this.sprite.y = y - 50;
+	this.moveWithOffset(x, y);
 
-	if(this.clockwise) {
-	  this.sprite.rotation += Math.PI/80;
-	  if(this.sprite.rotation >= Math.PI/2) {
-		this.clockwise = false;
-	  }
-	} else {
-	  this.sprite.rotation -= Math.PI/80;
-	  if(this.sprite.rotation <= 0) {
-		this.clockwise = true;
-	  }
+	// rotate se debe ejecutar antes de el if. El orden importa
+	this.rotate();
+	if(this.isRotationOutOfBounds()) {
+	  this.toggleRotation();
 	}
+
+  }
+
+  moveWithOffset(x, y) {
+	this.sprite.x = x + this.X_OFFSET;
+	this.sprite.y = y + this.Y_OFFSET;
+  }
+
+  rotate() {
+	const sign = this.clockwise? 1 : -1;
+	this.sprite.rotation = this.sprite.rotation + this.ROTATION_DELTA * sign;
+  }
+
+  isRotationOutOfBounds() {
+	return this.sprite.rotation <= this.ROTATION_LOWER_BOUND
+	  || this.sprite.rotation >= this.ROTATION_HIGHER_BOUND;
+  }
+
+  toggleRotation() {
+	this.clockwise = !this.clockwise;
   }
 }
 
