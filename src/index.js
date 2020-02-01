@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import platformAsset from "./assets/platform.png";
 import PlayerFactory from "./Player/Player";
+import backingAsset from "./assets/backing.jpg";
 
 const config = {
   type: Phaser.AUTO,
@@ -27,6 +28,8 @@ let playerFactory;
 function preload() {
   playerFactory = new PlayerFactory(this);
   playerFactory.loadAssets();
+
+  this.load.image("backing", backingAsset);
 }
 
 let player,
@@ -36,6 +39,8 @@ function create() {
   this.scale.pageAlignHorizontally = true;
   this.scale.pageAlignVertically = true;
   this.scale.refresh();
+
+  this.add.image(0, 0, "backing");
 
   player = playerFactory.create(64, 64);
   

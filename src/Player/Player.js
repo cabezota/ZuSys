@@ -6,7 +6,7 @@ import StateMachine from "javascript-state-machine";
 import JumpBarFactory from "./JumpBar/JumpBar";
 
 class Player {
-  constructor({sprite, directionFactory, jumpBarFactory, leftKey, rightKey}) {
+  constructor({sprite, directionFactory, jumpBarFactory, leftKey, rightKey, jumpKey}) {
 	this.sprite = sprite;
 	this.sprite.setCollideWorldBounds(true);
 	
@@ -27,7 +27,9 @@ class Player {
 	  init: "facingRight",
 	  transitions: [
 		{ name: "turnLeft", from: "facingRight", to: "facingLeft"},
-		{ name: "turnRight", from: "facingLeft", to: "facingRight"}
+		{ name: "turnRight", from: "facingLeft", to: "facingRight"},
+		{ name: "takeImpulseLeft", from: "facingLeft", to: "takingImpulse"},
+		{ name: "takeImpulseRight", from: "facingRight", to: "takingImpulse"}
 	  ],
 	  methods: {
 		onTurnLeft: () => {
@@ -37,11 +39,21 @@ class Player {
 		onTurnRight: () => {
 		  this.sprite.flipX = false;
 		  this.direction.turnRight();
-		}
+		},
+		onTakeImpulseLeft: () => {
+		  
+		},
 	  }
 	});
 
 	this.state.turnLeft();
+	// console.log(jumpKey);
+	// this.jumpKey = jumpKey;
+	// this.jumpKey.onDown().add(this.jump, this);
+  }
+
+  jump() {
+	console.log("hola");
   }
 
   update() {
@@ -78,10 +90,10 @@ export default class PlayerFactory {
 	  jumpBarFactory: this.jumpBarFactory,
 	  leftKey: this.game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT),
 	  rightKey: this.game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT),
+	  jumpKey: this.game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACEBAR),
 	});
 
 	const frames = this.game.anims.generateFrameNames("player");
-
 	const anims = this.game.anims.create({
 	  key: "idle",
 	  frames: [frames[0], frames[6]],

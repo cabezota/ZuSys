@@ -1,7 +1,8 @@
-import jumpBarAsset from "../../assets/burbuja-brincoTinyHero.png";
+import jumpBarAsset from "../../assets/green.png";
+import jumpBarJson from "../../assets/green.json";
 
 class JumpBar {
-  constructor({sprite}) {
+  constructor({sprite, anims, jumpKey}) {
 	this.sprite = sprite;
   }
 
@@ -18,16 +19,26 @@ export default class JumpBarFactory {
   }
 
   loadAssets() {
-	this.game.load.spritesheet(this.KEY, jumpBarAsset, {
-	  frameWidth: 20,
-	  frameHeight: 20,
-	});
+	this.game.load.atlas(this.KEY, jumpBarAsset, jumpBarJson);
   }
 
   create(x, y) {
-	return new JumpBar({
+	const frames = this.game.anims.generateFrameNames(this.KEY);
+	
+	const jumpBar = new JumpBar({
+	  anims: this.game.anims.create({
+		key: "charging",
+		frames,
+		frameRate: 2
+	  }),
 	  sprite: this.game.add.sprite(x, y, "jumpBar")
 	});
+
+	jumpBar.sprite.setFrame("Recurso 62.png");
+
+	// jumpBar.sprite.play(anims);
+
+	return jumpBar;
   }
 }
 
