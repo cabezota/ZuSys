@@ -30,17 +30,17 @@ function preload() {
 
 let player,
 	direction,
-	platforms,
-	spacebars;
+	platforms;
 function create() {
   this.scale.pageAlignHorizontally = true;
   this.scale.pageAlignVertically = true;
   this.scale.refresh();
-  player = playerFactory.create(64, 64);
 
+  player = playerFactory.create(64, 64);
+  
   platforms = this.physics.add.staticGroup();
   platforms.create(436, 536, "platform");
-
+  
   this.physics.add.collider(player, platforms);
 }
 

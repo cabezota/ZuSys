@@ -5,13 +5,14 @@ class Direction {
 	this.X_OFFSET = 15;
 	this.Y_OFFSET = -50;
 	this.ROTATION_DELTA = Math.PI/80;
-	this.ROTATION_LOWER_BOUND = 0;
-	this.ROTATION_HIGHER_BOUND = Math.PI/2;
+	this.ROTATION_0 = 0;
+	this.ROTATION_BOUND = Math.PI/2;
 
 	this.sprite = sprite;
 	// Para que la flecha rote con el borde inferior como centro.
 	this.sprite.setOrigin(1);
 	this.clockwise = true;
+	this.isFacingRight = true;
   }
 
   update(x, y) {
@@ -22,7 +23,6 @@ class Direction {
 	if(this.isRotationOutOfBounds()) {
 	  this.toggleRotation();
 	}
-
   }
 
   moveWithOffset(x, y) {
@@ -36,12 +36,29 @@ class Direction {
   }
 
   isRotationOutOfBounds() {
-	return this.sprite.rotation <= this.ROTATION_LOWER_BOUND
-	  || this.sprite.rotation >= this.ROTATION_HIGHER_BOUND;
+	if(this.isFacingRight) {	
+	  return this.sprite.rotation <= this.ROTATION_0 
+		|| this.sprite.rotation >= this.ROTATION_BOUND;  
+	} else {
+	  return this.sprite.rotation > this.ROTATION_0 
+		|| this.sprite.rotation < - this.ROTATION_BOUND;  	  
+	}
   }
 
   toggleRotation() {
 	this.clockwise = !this.clockwise;
+  }
+
+  turnLeft() {
+	this.isFacingRight = false;
+	this.clockwise = true;
+	this.sprite.rotation = - this.ROTATION_BOUND;
+  }
+
+  turnRight() {
+	this.isFacingRight = true;
+	this.clockwise = false;
+	this.sprite.rotation = this.ROTATION_BOUND;
   }
 }
 
