@@ -64,15 +64,16 @@ export class Level1 extends Phaser.Scene {
 
     this.player = this.playerFactory.create(64, 5800);
 
-    this.physics.add.collider(
-      this.player.sprite,
-      platforms,
-      (player, platform) => {
-        player.setVelocity(0, 0);
-      },
-      null,
-      this
-    );
+	this.physics.add.collider(
+	  this.player.sprite,
+	  platforms,
+	  (player, platform) => {
+		player.setVelocity(0, 0);
+		this.player.stand();
+	  },
+	  null,
+	  this
+	);
 
     this.cameras.main.setBounds(0, 0, 500, 6000);
     this.cameras.main.startFollow(this.player.sprite);

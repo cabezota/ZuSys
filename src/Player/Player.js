@@ -18,7 +18,7 @@ class Player {
 	idleAnims,
 	jumpingLeftAnims,
 	jumpingRightAnims,
-	
+	standingAnims,
   }) {
 	this.sprite = sprite;
 	this.sprite.setCollideWorldBounds(true);
@@ -43,19 +43,26 @@ class Player {
 	this.state = new StateMachine({
 	  init: "facingRight",
 	  transitions: [
-		{ name: "turnLeft", from: ["facingRight", "jumping"], to: "facingLeft"},
-		{ name: "turnRight", from: ["facingLeft", "jumping"], to: "facingRight"},
+		{ name: "turnLeft", from: ["facingRight", "standing"], to: "facingLeft"},
+		{ name: "turnRight", from: ["facingLeft", "standing"], to: "facingRight"},
 		{ name: "takeImpulse", from: ["facingLeft", "facingRight"], to: "takingImpulse"},
 		{ name: "jump", from: "takingImpulse", to: "jumping"},
+		{ name: "stand", from: "*", to: "standing"},
 	  ],
 	  methods: {
 		onTurnLeft: () => {
 		  this.sprite.flipX = true;
 		  this.direction.turnLeft();
+		  this.sprite.play(idleAnims);
+		  this.direction.sprite.alpha = 1;
+		  this.jumpBar.sprite.alpha = 1;
 		},
 		onTurnRight: () => {
 		  this.sprite.flipX = false;
 		  this.direction.turnRight();
+		  this.sprite.play(idleAnims);
+		  this.direction.sprite.alpha = 1;
+		  this.jumpBar.sprite.alpha = 1;
 		},
 		onTakeImpulse: () => {
 		  this.direction.shoot();		  
@@ -65,6 +72,11 @@ class Player {
 		  this.jumpBar.reset();
 		  this.direction.aim();
 		  this.sprite.play(jumpingRightAnims);
+		  this.direction.sprite.alpha = 0;
+		  this.jumpBar.sprite.alpha = 0;
+		},
+		onStand: () => {
+		  this.sprite.play(standingAnims);
 		},
 	  },
 	  plugins: [new StateMachineHistory()]
@@ -78,6 +90,10 @@ class Player {
 	this.jumpingLeftAnims = jumpingLeftAnims;
 
 	this.sprite.play(this.idleAnims);
+  }
+
+  stand() {
+	this.state.stand();
   }
 
   update() {
@@ -103,12 +119,7 @@ class Player {
 	  this.physics.velocityFromRotation(this.direction.sprite.rotation - Math.PI/2, this.speed, this.sprite.body.velocity);
 	  this.speed = 0;
 
-	  if(this.lastTurn() === "facingLeft")  {
-	  	this.state.turnLeft();
-	  }
-	  else {
-	  	this.state.turnRight();
-	  }
+	  // this.turnToLast();
 	}
 	if(Phaser.Input.Keyboard.JustDown(this.leftKey) && this.state.can("turnLeft")) {
 	  this.state.turnLeft();
@@ -118,13 +129,20 @@ class Player {
 	}
   }
 
+  turnToLast() {
+	  if(this.lastTurn() === "facingLeft")  {
+	  	this.state.turnLeft();
+	  }
+	  else {
+	  	this.state.turnRight();
+	  }	
+  }
+
   lastTurn() {
 	const turns = this.state.history.filter(state => {
 	  return state === "facingRight" || state === "facingLeft";
 	});
 	const lastTurn = turns[turns.length - 1];
-	this.state.clearHistory();
-
 	return lastTurn;
   }
 }
@@ -165,6 +183,12 @@ export default class PlayerFactory {
 	  repeat: -1,
 	});
 
+	const standingAnims = this.game.anims.create({
+	  key: "standing",
+	  frames: [frames[3]],
+	  repeat: -1,
+	});
+
 	const player = new Player({
 	  sprite: this.game.physics.add.sprite(x, y, "player"),
 	  directionFactory:  this.directionFactory,
@@ -176,6 +200,7 @@ export default class PlayerFactory {
 	  jumpingLeftAnims,
 	  jumpingRightAnims,
 	  idleAnims,
+	  standingAnims,
 	});
 
 	return player;
