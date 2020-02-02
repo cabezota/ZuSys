@@ -3,7 +3,6 @@ import platformAsset from "../assets/image/platform.png";
 import battery from "../assets/image/vidaTinyHero.png";
 import energyIcon from "../assets/image/enrgy-iconTinyHero.png";
 import energyBar from "../assets/image/energy-barTinyHero.png";
-import bgLives from "../assets/image/ui-vidaTinyHero.png";
 import powerUpAssets from "../assets/atlas/spritesheet2.png";
 import powerUpJson from "../assets/atlas/spritesheet2.json";
 import capturaPinza from "../assets/image/captura-pinzaTinyHero.png";
@@ -21,7 +20,6 @@ export class Hud extends Phaser.Scene {
     this.load.image("battery", battery);
     this.load.image("energyIcon", energyIcon);
     this.load.image("energyBar", energyBar);
-    this.load.image("bgLives", bgLives);
     this.load.atlas("powerUp", powerUpAssets, powerUpJson);
     this.load.image("capturaPinza", capturaPinza);
     this.load.image("capturaAmortiguador", capturaAmortiguador);
@@ -37,9 +35,6 @@ export class Hud extends Phaser.Scene {
     this.energyMask.visible = false;
 
     energyBar.mask = new Phaser.Display.Masks.BitmapMask(this, this.energyMask);
-
-    //background Lives
-    this.bgLives = this.add.sprite(465, 309, "bgLives");
 
     //energy icon
     this.energyIcon = this.add.sprite(470, 30, "energyIcon");
