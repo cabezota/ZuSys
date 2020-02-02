@@ -1,5 +1,4 @@
 import Phaser from "phaser";
-import platformAsset from "../assets/platform.png";
 import PlayerFactory from "../Player/Player";
 
 export class Level1 extends Phaser.Scene {
@@ -16,9 +15,7 @@ export class Level1 extends Phaser.Scene {
     }
   
     create() {  
-      player = this.playerFactory.create(64, 64);
-
-      this.add.text(0, 0, 'Scene 2..', { fontFamily: '"Roboto Condensed"' });
+      this.player = this.playerFactory.create(64, 64);
       
     }
   

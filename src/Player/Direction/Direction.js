@@ -1,9 +1,9 @@
-import directionAsset from "../../assets/flecha-direcion.png";
+import directionAsset from "../../assets/flecha-direcionTinyHero.png";
 
 class Direction {
   constructor(sprite) {
-	this.X_OFFSET = 15;
-	this.Y_OFFSET = -50;
+	this.X_OFFSET = 1;
+	this.Y_OFFSET = -64;
 	this.ROTATION_DELTA = Math.PI/80;
 	this.ROTATION_0 = 0;
 	this.ROTATION_BOUND = Math.PI/2;
@@ -12,21 +12,21 @@ class Direction {
 	// Para que la flecha rote con el borde inferior como centro.
 	this.sprite.setOrigin(1);
 	this.clockwise = true;
-	this.isFacingRight = true;
   }
 
-  update(x, y) {
-	this.moveWithOffset(x, y);
+  update(x, y, isFacingRight) {
+	this.moveWithOffset(x, y, isFacingRight);
 
 	// rotate se debe ejecutar antes de el if. El orden importa
 	this.rotate();
-	if(this.isRotationOutOfBounds()) {
+	if(this.isRotationOutOfBounds(isFacingRight)) {
 	  this.toggleRotation();
 	}
   }
 
-  moveWithOffset(x, y) {
-	this.sprite.x = x + this.X_OFFSET;
+  moveWithOffset(x, y, isFacingRight) {
+	const sign = isFacingRight? 1 : -1;
+	this.sprite.x = x + this.X_OFFSET * sign;
 	this.sprite.y = y + this.Y_OFFSET;
   }
 
@@ -35,8 +35,8 @@ class Direction {
 	this.sprite.rotation = this.sprite.rotation + this.ROTATION_DELTA * sign;
   }
 
-  isRotationOutOfBounds() {
-	if(this.isFacingRight) {	
+  isRotationOutOfBounds(isFacingRight) {
+	if(isFacingRight) {	
 	  return this.sprite.rotation <= this.ROTATION_0 
 		|| this.sprite.rotation >= this.ROTATION_BOUND;  
 	} else {
@@ -50,13 +50,11 @@ class Direction {
   }
 
   turnLeft() {
-	this.isFacingRight = false;
 	this.clockwise = true;
 	this.sprite.rotation = - this.ROTATION_BOUND;
   }
 
   turnRight() {
-	this.isFacingRight = true;
 	this.clockwise = false;
 	this.sprite.rotation = this.ROTATION_BOUND;
   }
