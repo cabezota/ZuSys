@@ -34,27 +34,43 @@ export class Level1 extends Phaser.Scene {
     this.backgroundImage.setScale(1, 1);
     this.map = this.make.tilemap({ key: 'map' });
 
-	this.physics.world.setBounds(0, 0, 500, 6000);
-	const platforms = this.physics.add.group({
-	  allowGravity: false,
-	  immovable: true,
-	});
-	const platformObjects = this.map.getObjectLayer("Capa de Objetos 1").objects;
-	console.log(platformObjects);
-	platformObjects.forEach(obj => {
-	  const platform  = platforms.create(obj.x, obj.y);
-	  platform.body.setSize(platform.width, platform.height);
-	});
+    this.physics.world.setBounds(0, 0, 500, 6000);
+    const platforms = this.physics.add.group({
+      allowGravity: false,
+      immovable: true,
+    });
+  
+
+
+    const platformObjects = this.map.getObjectLayer("Capa de Objetos 1").objects;
+    console.log(platformObjects);
+  
+
+
+    platformObjects.forEach(obj => {
+      const platform  = platforms.create(obj.x, obj.y);
+      platform.body.setSize(platform.width, platform.height);
+    });
+
+
+    var ui = this.scene.launch("Hud", {
+      eventListener: this
+    });
+    this.scene.bringToTop("Hud")
+
+    this.backgroundImage = this.add.image(0, 0,'background').setOrigin(0, 0);
+    this.backgroundImage.setScale(1, 1);
+    this.map = this.make.tilemap({ key: 'map' });
 
     this.player = this.playerFactory.create(64, 64);
 
-	this.physics.add.collider(
-	  this.player.sprite,
-	  platforms,
-	  (player, platform) => {player.setVelocity(0, 0);},
-	  null,
-	  this
-	);
+    this.physics.add.collider(
+      this.player.sprite,
+      platforms,
+      (player, platform) => {player.setVelocity(0, 0);},
+      null,
+      this
+    );
 
     this.cameras.main.setBounds(0,0, 500, 6000);
 	this.cameras.main.startFollow(this.player.sprite);
