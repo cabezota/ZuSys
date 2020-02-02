@@ -21,6 +21,7 @@ class Player {
 	jumpingRightAnims,
 	standingAnims,
 	jumpSound,
+	happyAnims,
   }) {
 	this.jumpSound = jumpSound;
 	this.sprite = sprite;
@@ -90,12 +91,12 @@ class Player {
 	});
 
 	this.speed = 0;
-	this.MAX_SPEED = 450;
+	this.MAX_SPEED = 500;
 
 	this.idleAnims = idleAnims;
 	this.jumpingRightAnims = jumpingRightAnims;
 	this.jumpingLeftAnims = jumpingLeftAnims;
-	
+
 	this.sprite.play(this.idleAnims);
   }
 
@@ -181,7 +182,8 @@ export default class PlayerFactory {
 
 	const jumpingRightAnims = this.game.anims.create({
 	  key: "jumping_right",
-	  frames: [frames[4]],
+	  frames: [frames[4], frames[1], frames[4], frames[5]],
+	  frameRate: 3,
 	  repeat: -1
 	});	
 	
@@ -198,6 +200,12 @@ export default class PlayerFactory {
 	  repeat: -1,
 	});
 
+	const happyAnims = this.game.anims.create({
+	  key: "happy",
+	  frames: [frames[1]],
+	  repeat: 120
+	});
+
 	const player = new Player({
 	  sprite: this.game.physics.add.sprite(x, y, "player"),
 	  directionFactory:  this.directionFactory,
@@ -210,6 +218,7 @@ export default class PlayerFactory {
 	  jumpingRightAnims,
 	  idleAnims,
 	  standingAnims,
+	  happyAnims,
 	  jumpSound: this.game.sound.add("jump"),
 	});
 
