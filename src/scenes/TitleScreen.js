@@ -17,7 +17,6 @@ export class TitleScreen extends Phaser.Scene {
   }
 
   create() { 
-    
     var music = this.sound.add('music');
     music.play();
 
@@ -72,6 +71,8 @@ export class TitleScreen extends Phaser.Scene {
   startGame() {
     this.scene.start("Level1");
   }
+
+
   
 }
 
