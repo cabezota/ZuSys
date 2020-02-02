@@ -62,7 +62,7 @@ export class Level1 extends Phaser.Scene {
     this.backgroundImage.setScale(1, 1);
     this.map = this.make.tilemap({ key: "map" });
 
-    this.player = this.playerFactory.create(64, 64);
+    this.player = this.playerFactory.create(64, 5800);
 
     this.physics.add.collider(
       this.player.sprite,
