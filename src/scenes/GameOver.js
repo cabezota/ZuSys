@@ -8,7 +8,7 @@ export class GameOver extends Phaser.Scene {
 
   }
   create(){
-    
+    this.add.text(0,0, "Scene3...")
   }
   update(){
     
