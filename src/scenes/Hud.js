@@ -17,7 +17,7 @@ var ambiente;
 export class Hud extends Phaser.Scene {
   constructor() {
     super("Hud");
-    this.initialTime = 120;
+    this.initialTime = 1;
     this.platforms = null;
   }
   preload() {

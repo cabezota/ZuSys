@@ -5,6 +5,7 @@ import DirectionFactory from "./Direction/Direction";
 import StateMachine from "javascript-state-machine";
 import StateMachineHistory from "javascript-state-machine/lib/history";
 import JumpBarFactory from "./JumpBar/JumpBar";
+import jumpAudioAsset from "../assets/audio/Salto.ogg";
 
 class Player {
   constructor({
@@ -19,7 +20,9 @@ class Player {
 	jumpingLeftAnims,
 	jumpingRightAnims,
 	standingAnims,
+	jumpSound,
   }) {
+	this.jumpSound = jumpSound;
 	this.sprite = sprite;
 	this.sprite.setCollideWorldBounds(true);
 	
@@ -74,6 +77,7 @@ class Player {
 		  this.sprite.play(jumpingRightAnims);
 		  this.direction.sprite.alpha = 0;
 		  this.jumpBar.sprite.alpha = 0;
+		  this.jumpSound.play();
 		},
 		onStand: () => {
 		  this.sprite.play(standingAnims);
@@ -91,7 +95,7 @@ class Player {
 	this.idleAnims = idleAnims;
 	this.jumpingRightAnims = jumpingRightAnims;
 	this.jumpingLeftAnims = jumpingLeftAnims;
-
+	
 	this.sprite.play(this.idleAnims);
   }
 
@@ -160,6 +164,7 @@ export default class PlayerFactory {
   }
 
   loadAssets() {
+	this.jumpAudio = this.game.load.audio("jump", jumpAudioAsset);
 	this.game.load.atlas("player", playerAsset, playerJson);
 	this.directionFactory.loadAssets();
 	this.jumpBarFactory.loadAssets();
@@ -205,6 +210,7 @@ export default class PlayerFactory {
 	  jumpingRightAnims,
 	  idleAnims,
 	  standingAnims,
+	  jumpSound: this.game.sound.add("jump"),
 	});
 
 	return player;
