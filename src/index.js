@@ -6,8 +6,8 @@ import { GameOver } from "./scenes/GameOver";
 const config = {
   type: Phaser.AUTO,
   width: 500,
-  height: 6000,
-  scene: [TitleScreen, Level1, GameOver],
+  height: 600,
+  scene: [Level1],
   physics: {
     default: "arcade",
     arcade: {
