@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import Background from "../assets/map/backgrounds/zuSys-fondo-title.png";
 import Title from "../assets/map/backgrounds/zuSys-title.png";
 import Electra from "../assets/map/backgrounds/zuSys-electra-title.png";
+import mp3 from '../assets/audio/inicio.ogg'
 
 export class TitleScreen extends Phaser.Scene {
   constructor() {
@@ -12,7 +13,7 @@ export class TitleScreen extends Phaser.Scene {
     this.load.image('bg', Background );
     this.load.image('electra', Electra );
     this.load.image('title', Title);
-    this.load.audio('music',"../../assets/audio/inicio.mp3");
+    this.load.audio('music',mp3);
   }
 
   create() { 
