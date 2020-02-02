@@ -1,5 +1,4 @@
 import Phaser from "phaser";
-import playerAsset from "../assets/image/sprite-pruebita.png";
 import platformAsset from "../assets/image/platform.png";
 import battery from "../assets/image/vidaTinyHero.png";
 import energyIcon from "../assets/image/enrgy-iconTinyHero.png";
@@ -15,11 +14,9 @@ export class Hud extends Phaser.Scene {
   constructor(){
     super("Hud")
     this.initialTime = 60;
-    this.player = null
     this.platforms = null;
   }
   preload(){
-    this.load.image("player", playerAsset);
     this.load.image("platform", platformAsset);
     this.load.image("battery", battery);
     this.load.image("energyIcon", energyIcon);
@@ -32,10 +29,6 @@ export class Hud extends Phaser.Scene {
   }
   create(){
     this.timeLeft = this.initialTime;
-    this.player = this.physics.add.sprite(64, 64, "player");
-    this.player.setBounce(0.2);
-    this.player.setCollideWorldBounds(true);
-    
     this.platforms = this.physics.add.staticGroup();
     this.platforms.create(436, 536, "platform");
     
