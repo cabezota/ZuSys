@@ -43,26 +43,26 @@ class Player {
 	this.state = new StateMachine({
 	  init: "facingRight",
 	  transitions: [
-		{ name: "turnLeft", from: ["facingRight", "standing"], to: "facingLeft"},
-		{ name: "turnRight", from: ["facingLeft", "standing"], to: "facingRight"},
+		{ name: "turnLeft", from: ["facingRight", "jumping"], to: "facingLeft"},
+		{ name: "turnRight", from: ["facingLeft", "jumping"], to: "facingRight"},
 		{ name: "takeImpulse", from: ["facingLeft", "facingRight"], to: "takingImpulse"},
 		{ name: "jump", from: "takingImpulse", to: "jumping"},
 		{ name: "stand", from: "*", to: "standing"},
 	  ],
 	  methods: {
 		onTurnLeft: () => {
+		  this.direction.sprite.alpha = 1;
+		  this.jumpBar.sprite.alpha = 1;
 		  this.sprite.flipX = true;
 		  this.direction.turnLeft();
 		  this.sprite.play(idleAnims);
-		  this.direction.sprite.alpha = 1;
-		  this.jumpBar.sprite.alpha = 1;
 		},
 		onTurnRight: () => {
+		  this.direction.sprite.alpha = 1;
+		  this.jumpBar.sprite.alpha = 1;		  
 		  this.sprite.flipX = false;
 		  this.direction.turnRight();
 		  this.sprite.play(idleAnims);
-		  this.direction.sprite.alpha = 1;
-		  this.jumpBar.sprite.alpha = 1;
 		},
 		onTakeImpulse: () => {
 		  this.direction.shoot();		  
@@ -78,6 +78,9 @@ class Player {
 		onStand: () => {
 		  this.sprite.play(standingAnims);
 		},
+		onInvalidTransition: (transition, from, to) => {
+		  console.log(transition, from, to);
+		}
 	  },
 	  plugins: [new StateMachineHistory()]
 	});
@@ -94,6 +97,7 @@ class Player {
 
   stand() {
 	this.state.stand();
+	this.turnToLast();
   }
 
   update() {

@@ -44,13 +44,15 @@ export class Level1 extends Phaser.Scene {
       immovable: true
     });
 
-    const platformObjects = this.map.getObjectLayer("Capa de Objetos 1")
-      .objects;
-    console.log(platformObjects);
+    const platformObjects = this.map.getObjectLayer("Capa de Objetos 1").objects;
 
     platformObjects.forEach(obj => {
-      const platform = platforms.create(obj.x, obj.y);
-      platform.body.setSize(platform.width, platform.height);
+      const platform  = platforms.create(obj.x, obj.y);
+      platform.body.setSize(obj.width, obj.height);
+	  platform.body.checkCollision.up = true;
+	  platform.body.checkCollision.down = false;
+	  platform.body.checkCollision.left = false;
+	  platform.body.checkCollision.right = false;
     });
 
     var ui = this.scene.launch("Hud", {
@@ -61,7 +63,7 @@ export class Level1 extends Phaser.Scene {
     this.backgroundImage = this.add.image(0, 0, "background").setOrigin(0, 0);
     this.backgroundImage.setScale(1, 1);
     this.map = this.make.tilemap({ key: "map" });
-
+	
     this.player = this.playerFactory.create(64, 5800);
 
 	this.physics.add.collider(
@@ -69,7 +71,7 @@ export class Level1 extends Phaser.Scene {
 	  platforms,
 	  (player, platform) => {
 		player.setVelocity(0, 0);
-		this.player.stand();
+		this.player.turnToLast();
 	  },
 	  null,
 	  this
