@@ -8,6 +8,11 @@ import powerUpJson from "../assets/atlas/spritesheet2.json";
 import capturaPinza from "../assets/image/captura-pinzaTinyHero.png";
 import capturaAmortiguador from "../assets/image/captura-amortiguadorTinyHero.png";
 import capturaEngranaje from "../assets/image/captura-engranajeTinyHero.png";
+import ambienteAudio from "../assets/audio/Ambiente.ogg";
+import levelAudio from "../assets/audio/In-game.ogg";
+
+var level;
+var ambiente;
 
 export class Hud extends Phaser.Scene {
   constructor() {
@@ -24,8 +29,14 @@ export class Hud extends Phaser.Scene {
     this.load.image("capturaPinza", capturaPinza);
     this.load.image("capturaAmortiguador", capturaAmortiguador);
     this.load.image("capturaEngranaje", capturaEngranaje);
+    this.load.audio("levelAudio", levelAudio);
+    this.load.audio("ambienteAudio", ambienteAudio);
   }
   create() {
+    level = this.sound.add("levelAudio", { loop: true });
+    ambiente = this.sound.add("ambienteAudio", { loop: true });
+    level.play();
+    ambiente.play();
     this.timeLeft = this.initialTime;
 
     //energybar
@@ -86,7 +97,8 @@ export class Hud extends Phaser.Scene {
       [],
       this
     );
-
+    level.stop();
+    ambiente.stop();
     this.scene.start("GameOver");
   }
 }
