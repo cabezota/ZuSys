@@ -22,7 +22,7 @@ export class Level1 extends Phaser.Scene {
     this.load.image("background", background);
     this.load.image("platforms", platforms);
     this.load.tilemapTiledJSON("map", map);
-
+	
     this.playerFactory = new PlayerFactory(this);
     this.playerFactory.loadAssets();
     this.load.audio("levelAudio", levelAudio);
@@ -34,8 +34,8 @@ export class Level1 extends Phaser.Scene {
     var ambienteAudio = this.sound.add("ambienteAudio", { loop: true });
     levelAudio.play();
     ambienteAudio.play();
-    this.backgroundImage = this.add.image(0, 0, "background").setOrigin(0, 0);
-    this.backgroundImage.setScale(1, 1);
+    this.backgroundImage = this.add.image(0, 0, "background");
+    // this.backgroundImage.setScale(1, 1);
     this.map = this.make.tilemap({ key: "map" });
 
     this.physics.world.setBounds(0, 0, 500, 6000);
@@ -47,12 +47,14 @@ export class Level1 extends Phaser.Scene {
     const platformObjects = this.map.getObjectLayer("Capa de Objetos 1").objects;
 
     platformObjects.forEach(obj => {
-      const platform  = platforms.create(obj.x, obj.y);
-      platform.body.setSize(obj.width, obj.height);
+      const platform  = platforms.create(obj.x , obj.y);
+	  console.log(platform);
+      platform.body.setSize(obj.width, obj.height, false);
 	  platform.body.checkCollision.up = true;
 	  platform.body.checkCollision.down = false;
 	  platform.body.checkCollision.left = false;
 	  platform.body.checkCollision.right = false;
+	  platform.setOrigin(0, 0);
     });
 
     var ui = this.scene.launch("Hud", {
