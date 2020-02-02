@@ -30,6 +30,11 @@ export class Level1 extends Phaser.Scene {
   
     create() {  
 
+      var ui = this.scene.launch("Hud", {
+        eventListener: this
+      });
+      this.scene.bringToTop("Hud")
+
       this.backgroundImage = this.add.image(0, 0,'background').setOrigin(0, 0);
       this.backgroundImage.setScale(1, 1);
       this.map = this.make.tilemap({ key: 'map' });
