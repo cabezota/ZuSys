@@ -12,9 +12,13 @@ export class TitleScreen extends Phaser.Scene {
     this.load.image('bg', Background );
     this.load.image('electra', Electra );
     this.load.image('title', Title);
+    this.load.audio('music',"../../assets/audio/inicio.mp3");
   }
 
   create() { 
+    
+    var music = this.sound.add('music');
+    music.play();
 
     var titleBackground = this.add.tileSprite(0.0, 0.0, 500.0, 600.0, "bg")
     titleBackground.setOrigin(0.0,0.0)
