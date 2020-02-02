@@ -13,9 +13,9 @@ const config = {
     default: "arcade",
     arcade: {
       gravity: { y: 300 },
-      debug: false,
-	}
-  },
+      debug: false
+    }
+  }
 };
 
 export const game = new Phaser.Game(config);

@@ -83,24 +83,11 @@ export class Level1 extends Phaser.Scene {
     // this.layer_collisions.debug = false;
     // this.setTopCollisionsTiles(2);
 
-    this.input.keyboard.on("keydown_ENTER", this.gameOver, this);
   }
 
   update() {
     this.player.update();
   }
 
-  gameOver() {
-    this.cameras.main.shake(500);
-    // fade camera
-    this.time.delayedCall(
-      250,
-      function() {
-        this.cameras.main.fade(250);
-      },
-      [],
-      this
-    );
-    this.scene.start("GameOver");
-  }
+  
 }
