@@ -90,7 +90,7 @@ class Player {
 	});
 
 	this.speed = 0;
-	this.MAX_SPEED = 400;
+	this.MAX_SPEED = 450;
 
 	this.idleAnims = idleAnims;
 	this.jumpingRightAnims = jumpingRightAnims;
