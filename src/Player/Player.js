@@ -7,7 +7,19 @@ import StateMachineHistory from "javascript-state-machine/lib/history";
 import JumpBarFactory from "./JumpBar/JumpBar";
 
 class Player {
-  constructor({sprite, directionFactory, jumpBarFactory, leftKey, rightKey, jumpKey}) {
+  constructor({
+	sprite,
+	directionFactory,
+	jumpBarFactory,
+	leftKey,
+	rightKey,
+	jumpKey,
+	physics,
+	idleAnims,
+	jumpingLeftAnims,
+	jumpingRightAnims,
+	
+  }) {
 	this.sprite = sprite;
 	this.sprite.setCollideWorldBounds(true);
 	
@@ -25,6 +37,8 @@ class Player {
 	this.leftKey = leftKey;
 	this.rightKey = rightKey;
 	this.jumpKey = jumpKey;
+
+	this.physics = physics;	
 
 	this.state = new StateMachine({
 	  init: "facingRight",
@@ -50,15 +64,20 @@ class Player {
 		onJump: () => {
 		  this.jumpBar.reset();
 		  this.direction.aim();
+		  this.sprite.play(jumpingRightAnims);
 		},
 	  },
 	  plugins: [new StateMachineHistory()]
 	});
 
-  }
+	this.speed = 0;
+	this.MAX_SPEED = 400;
 
-  jump() {
-	console.log("hola");
+	this.idleAnims = idleAnims;
+	this.jumpingRightAnims = jumpingRightAnims;
+	this.jumpingLeftAnims = jumpingLeftAnims;
+
+	this.sprite.play(this.idleAnims);
   }
 
   update() {
@@ -67,31 +86,46 @@ class Player {
 
 
 	if(Phaser.Input.Keyboard.JustDown(this.jumpKey) && this.state.can("takeImpulse")) {
-	  this.state.takeImpulse();
-	}		
-
-	if(Phaser.Input.Keyboard.JustUp(this.jumpKey) && this.state.can("jump")) {
-	  this.state.jump();
-	  const turns = this.state.history.filter(state => {
-		return state === "facingRight" || state === "facingLeft";
-	  });
-	  const lastTurn = turns[turns.length - 1];
-	  this.state.clearHistory();
-
-	  if(lastTurn === "facingLeft")  {
-		this.state.turnLeft();
-	  }
-	  else {
-		this.state.turnRight();
+	  if(!this.state.is("takingImpulse")) {
+		this.state.takeImpulse();
 	  }
 	}
 
+	if(this.state.is("takingImpulse")) {
+	  if(this.speed < this.MAX_SPEED) {
+		this.speed += 4;
+	  }	  
+	}
+
+	if(Phaser.Input.Keyboard.JustUp(this.jumpKey) && this.state.can("jump")) {
+	  this.state.jump();
+
+	  this.physics.velocityFromRotation(this.direction.sprite.rotation - Math.PI/2, this.speed, this.sprite.body.velocity);
+	  this.speed = 0;
+
+	  if(this.lastTurn() === "facingLeft")  {
+	  	this.state.turnLeft();
+	  }
+	  else {
+	  	this.state.turnRight();
+	  }
+	}
 	if(Phaser.Input.Keyboard.JustDown(this.leftKey) && this.state.can("turnLeft")) {
 	  this.state.turnLeft();
 	}
 	if(Phaser.Input.Keyboard.JustDown(this.rightKey) && this.state.can("turnRight")) {
 	  this.state.turnRight();
 	}
+  }
+
+  lastTurn() {
+	const turns = this.state.history.filter(state => {
+	  return state === "facingRight" || state === "facingLeft";
+	});
+	const lastTurn = turns[turns.length - 1];
+	this.state.clearHistory();
+
+	return lastTurn;
   }
 }
 
@@ -110,6 +144,27 @@ export default class PlayerFactory {
   }
 
   create(x, y) {
+	const frames = this.game.anims.generateFrameNames("player");
+	
+	const jumpingLeftAnims = this.game.anims.create({
+	  key: "jumping_left",
+ 	  frames: [frames[2]],
+	  repeat: -1
+	});
+
+	const jumpingRightAnims = this.game.anims.create({
+	  key: "jumping_right",
+	  frames: [frames[4]],
+	  repeat: -1
+	});	
+	
+	const idleAnims = this.game.anims.create({
+	  key: "idle",
+	  frames: [frames[0], frames[6]],
+	  frameRate: 2,
+	  repeat: -1,
+	});
+
 	const player = new Player({
 	  sprite: this.game.physics.add.sprite(x, y, "player"),
 	  directionFactory:  this.directionFactory,
@@ -117,19 +172,14 @@ export default class PlayerFactory {
 	  leftKey: this.game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT),
 	  rightKey: this.game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT),
 	  jumpKey: this.game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
+	  physics: this.game.physics,
+	  jumpingLeftAnims,
+	  jumpingRightAnims,
+	  idleAnims,
 	});
-
-	const frames = this.game.anims.generateFrameNames("player");
-	const anims = this.game.anims.create({
-	  key: "idle",
-	  frames: [frames[0], frames[6]],
-	  frameRate: 2,
-	  repeat: -1,
-	});
-
-	player.sprite.play(anims);
 
 	return player;
   }
 }
 
+ 
