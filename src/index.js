@@ -18,4 +18,3 @@ const config = {
 };
 
 export const game = new Phaser.Game(config);
-

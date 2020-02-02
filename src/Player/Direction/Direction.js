@@ -24,6 +24,14 @@ class Direction {
 	}
   }
 
+  shoot() {
+	this.ROTATION_DELTA = 0;	
+  }
+
+  aim() {
+	this.ROTATION_DELTA = Math.PI/80;
+  }
+
   moveWithOffset(x, y, isFacingRight) {
 	const sign = isFacingRight? 1 : -1;
 	this.sprite.x = x + this.X_OFFSET * sign;
