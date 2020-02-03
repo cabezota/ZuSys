@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import Background from "../assets/map/backgrounds/zuSys-fondo-title.png";
+import Background from "../assets/map/backgrounds/zuSys-fondo-title-big.png";
 import Title from "../assets/map/backgrounds/zuSys-title.png";
 import Electra from "../assets/map/backgrounds/zuSys-electra-title.png";
 import mp3 from "../assets/audio/inicio.ogg";
@@ -25,24 +25,28 @@ export class TitleScreen extends Phaser.Scene {
     music = this.sound.add("music");
     music.play();
 
-    var titleBackground = this.add.tileSprite(0.0, 0.0, 500.0, 600.0, "bg");
-    titleBackground.setOrigin(0.0, 0.0);
+    var titleBackground = this.add.tileSprite(0.0, 0.0, 500.0, 800.0, "bg");
+    titleBackground.setOrigin(0.0, 0.20);
     titleBackground.setScrollFactor(0.0, 0.0);
 
     var gameTitle = this.add.image(244.00002, 196.0, "title");
 
-    var titleElectra = this.add.tileSprite(95.0, 220, 291.0, 311.0, "electra");
+    var titleElectra = this.add.tileSprite(140.0, 345, 291.0, 311.0, "electra");
     titleElectra.setOrigin(0.0, 0.0);
     titleElectra.setScrollFactor(0.25, 0.0);
 
+    titleElectra.setScale(0.7);
+
+
     var tween = this.tweens.add({
-      targets: titleElectra,
-      y: 180,
+      targets: [titleElectra, titleBackground],
+      y: 50,
       duration: 2000,
       ease: "Power1",
       loop: 100,
       yoyo: true
     });
+
 
     var instructions = this.add.image(144.00002, 75.42618, "instructions");
     instructions.visible = false;
