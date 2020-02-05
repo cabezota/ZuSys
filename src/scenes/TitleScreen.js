@@ -34,13 +34,12 @@ export class TitleScreen extends Phaser.Scene {
     var titleElectra = this.add.tileSprite(140.0, 345, 291.0, 311.0, "electra");
     titleElectra.setOrigin(0.0, 0.0);
     titleElectra.setScrollFactor(0.25, 0.0);
-
     titleElectra.setScale(0.7);
 
 
     var tween = this.tweens.add({
       targets: [titleElectra, titleBackground],
-      y: 50,
+      y: 100,
       duration: 2000,
       ease: "Power1",
       loop: 100,
