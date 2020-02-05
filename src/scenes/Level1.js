@@ -14,6 +14,7 @@ export class Level1 extends Phaser.Scene {
     this.map = null;
     this.background = null;
     this.backgroundImage = null;
+
   }
 
   preload() {
@@ -50,10 +51,6 @@ export class Level1 extends Phaser.Scene {
       platform.setOrigin(0, 0);
     });
 
-    var ui = this.scene.launch("Hud", {
-      eventListener: this
-    });
-    this.scene.bringToTop("Hud");
 
     this.backgroundImage = this.add.image(0, 0, "background").setOrigin(0, 0);
     this.backgroundImage.setScale(1, 1);

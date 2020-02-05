@@ -3,12 +3,13 @@ import { TitleScreen } from "./scenes/TitleScreen";
 import { Level1 } from "./scenes/Level1";
 import { GameOver } from "./scenes/GameOver";
 import { Hud } from "./scenes/Hud";
+import { gameBackground} from "./scenes/gameBackground";
 
 const config = {
   type: Phaser.AUTO,
   width: 500,
   height: 600,
-  scene: [TitleScreen, Level1, Hud, GameOver],
+  scene: [TitleScreen, gameBackground, Level1, Hud, GameOver],
   physics: {
     default: "arcade",
     arcade: {

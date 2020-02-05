@@ -25,7 +25,7 @@ export class GameOver extends Phaser.Scene {
 
     this.electraGameOver1 = this.add.image(250, 400, "electraGameOver");
     
-    
+    localStorage.setItem('lives', 3)
 
 
 

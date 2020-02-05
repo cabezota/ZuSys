@@ -46,6 +46,7 @@ export class TitleScreen extends Phaser.Scene {
       yoyo: true
     });
 
+    localStorage.setItem('lives', 3)
 
     var instructions = this.add.image(144.00002, 75.42618, "instructions");
     instructions.visible = false;
@@ -77,7 +78,7 @@ export class TitleScreen extends Phaser.Scene {
   }
 
   startGame() {
-    this.scene.start("Level1");
+    this.scene.start("gameBackground");
     music.stop();
   }
 }

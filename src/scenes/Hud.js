@@ -55,6 +55,7 @@ export class Hud extends Phaser.Scene {
     this.lives_2 = this.add.sprite(465, 310, "battery");
     this.lives_3 = this.add.sprite(465, 285, "battery");
 
+
     //PowerUps
     this.powerUp = this.add
       .sprite(470, 233, "powerUp")
@@ -67,7 +68,7 @@ export class Hud extends Phaser.Scene {
 
     //Barra de tiempo
     this.gameTimer = this.time.addEvent({
-      delay: 1000,
+      delay: 100,
       callback: function() {
         this.timeLeft--;
 
@@ -86,19 +87,93 @@ export class Hud extends Phaser.Scene {
     });
   }
 
-  gameOver() {
-    this.cameras.main.shake(500);
-    // fade camera
-    this.time.delayedCall(
-      250,
-      function() {
-        this.cameras.main.fade(250);
+  resetTimer(){
+
+    this.timeLeft = this.initialTime;
+
+    
+
+    this.gameTimer = this.time.addEvent({
+      delay: 100,
+      callback: function() {
+        this.timeLeft--;
+        
+        // dividing enery bar width by the number of seconds gives us the amount
+        // of pixels we need to move the energy bar each second
+        let stepHeight = this.energyMask.displayHeight / this.initialTime;
+
+        // moving the mask
+        this.energyMask.y -= stepHeight;
+        if (this.timeLeft === 0) {
+          this.gameOver();
+        }
       },
-      [],
-      this
-    );
-    level.stop();
-    ambiente.stop();
-    this.scene.start("GameOver");
+      callbackScope: this,
+      loop: true
+    });
+  }
+
+  gameOver() {
+    var level1;
+    var localLives = parseInt(localStorage.getItem("lives"));
+
+
+    switch(localLives){
+      case 3:
+
+        localStorage.setItem("lives", 2 )
+        level1 = this.scene.get('Level1');
+        this.lives_3.destroy()
+        this.resetTimer()
+
+        level1.scene.restart();
+
+      break;
+      case 2:
+
+        localStorage.setItem("lives", 1 )
+        level1 = this.scene.get('Level1');
+        this.lives_2.destroy()
+        this.resetTimer()
+        level1.scene.restart();
+
+      break;
+      case 1:
+
+        localStorage.setItem("lives", 0 )
+        level1 = this.scene.get('Level1');
+        this.lives_1.destroy()
+        this.resetTimer()
+
+        level1.scene.restart();
+
+      break;  
+      case 0:
+        this.cameras.main.shake(500);
+        // fade camera
+        this.time.delayedCall(
+          250,
+          function() {
+            this.cameras.main.fade(250);
+          },
+          [],
+          this
+        );
+        level.stop();
+        ambiente.stop();
+        this.scene.start("GameOver");
+
+      break; 
+      default:
+
+        localStorage.setItem("lives", 2 )
+        level1 = this.scene.get('Level1');
+        this.lives_3.destroy()
+        this.resetTimer()
+
+        level1.scene.restart();
+
+      break;
+    }
   }
 }
