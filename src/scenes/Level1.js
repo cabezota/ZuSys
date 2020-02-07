@@ -28,7 +28,7 @@ export class Level1 extends Phaser.Scene {
 
   create() {
     this.backgroundImage = this.add.image(0, 0, "background");
-    // this.backgroundImage.setScale(1, 1);
+
     this.map = this.make.tilemap({ key: "map" });
 
     this.physics.world.setBounds(0, 0, 500, 6000);
@@ -72,11 +72,7 @@ export class Level1 extends Phaser.Scene {
     this.cameras.main.setBounds(0, 0, 500, 6000);
     this.cameras.main.startFollow(this.player.sprite);
 
-    // this.layer_collisions = this.map.createStaticLayer("Collisions Layer");
-    // this.map.setCollision([1]);
-    // this.layer_collisions.visible = false;
-    // this.layer_collisions.debug = false;
-    // this.setTopCollisionsTiles(2);
+
   }
 
   update() {

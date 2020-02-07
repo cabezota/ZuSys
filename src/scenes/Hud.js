@@ -68,7 +68,7 @@ export class Hud extends Phaser.Scene {
 
     //Barra de tiempo
     this.gameTimer = this.time.addEvent({
-      delay: 100,
+      delay: 1000,
       callback: function() {
         this.timeLeft--;
 
@@ -91,10 +91,9 @@ export class Hud extends Phaser.Scene {
 
     this.timeLeft = this.initialTime;
 
-    
 
     this.gameTimer = this.time.addEvent({
-      delay: 100,
+      delay: 1000,
       callback: function() {
         this.timeLeft--;
         
